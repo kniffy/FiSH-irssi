@@ -63,7 +63,17 @@ int decrypt_string_xs(const char *key, const char *str, char *dest, int len) {
             }
         } else {
             /* messages that are older than 10000ms are discarded */
-            if (millisecondsSinceEpoch-millisecondsSinceEpochReceived > 10000) {
+
+            /*
+             KNIFFY EDIT: this check is REALLY ANNOYING, so i'm moving it to slightly over 10 minutes to sit with
+	     default eggdrop setting max-queue-msg being 300
+	     should there be a more strict setting for pm queries?
+
+             i'm really sick of topics being broken after this time limit; i'm open to a fix..
+             and perhaps simply a warning on possible replay attack without covering up the message?
+	    */
+
+            if (millisecondsSinceEpoch-millisecondsSinceEpochReceived > 602000) {
                 snprintf(dest, 34, "message too old (%013llums)", millisecondsSinceEpoch-millisecondsSinceEpochReceived);
                 return 0;
             }

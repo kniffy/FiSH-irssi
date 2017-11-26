@@ -146,9 +146,14 @@ int FiSH_encrypt(const SERVER_REC * serverRec, const char *msgPtr,
 
     strcpy(bf_dest, "+OK ");
 
+ /*
+   KNIFFY EDIT: very dirty edit to get rid of blowfish.
+   100 slaps with a large trout for anyone still touching blowfish anymore!
+   /setmethod effectively does nothing now
+ */
     if (getContactMethod(contactName, iniValueEncryptionMethod.key) == FALSE) {
         /* no encryption method defined so use blowfish ecb */
-        encrypt_string(iniValue.key, msgPtr, bf_dest + 4, strlen(msgPtr));
+        encrypt_string_xs(iniValue.key, msgPtr, bf_dest + 4, strlen(msgPtr));
     } else {
        /* use the new method. Maybe make this a case switch lateron */
         encrypt_string_xs(iniValue.key, msgPtr, bf_dest + 4, strlen(msgPtr));
